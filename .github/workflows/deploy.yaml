@@ -19,6 +19,7 @@ jobs:
         working-directory: ./src
 
     steps:
+
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,6 +45,15 @@ jobs:
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         run: terraform fmt -check
+
+      # Create input variables from Environment Secret
+      # NOTE: Avoid terraform.tfvars
+      - name: Setup Terraform variables
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+            key_name  = ${{ secrets.KEY_NAME }}
+            subnet_id = ${{ secrets.SUBNET_ID }}
+          EOF
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
