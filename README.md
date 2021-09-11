@@ -1,21 +1,20 @@
-# How to use
-**AWS CLI**, **terraform** will be executed inside Docker Container.
+## Checking Ubuntu AWS AMI
 
-## Step 1: Update Makefile
-* TERRAFORM_VERSION: https://hub.docker.com/r/hashicorp/terraform/tags
-* AWS_CLI_VERSION: https://hub.docker.com/r/amazon/aws-cli/tags
+1. Find latest AMI ID by open "Create EC2 Page"
+2. Get AMI information
 
-## Step 2: Build local AWSCLI image include Terraform
 ```
-make build-awscli-terraform-image
+make awscli ARG="ec2 describe-images --image-ids ami-0df99b3a8349462c6"
 ```
+- Ubuntu AMI Owner ID: 099720109477
+- Name: ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*
 
-## Step 3: Prepare AWS credentials
 
-1. Get ACCESS_KEY and SECRET_ACCESS_KEY
-2. Create file: `.aws/credentials`
+## Terraform
+1. Update backend.tf, change `key`
+2. Using these commands
 ```
-[default]
-aws_access_key_id=[[ ACCESS_KEY ]]
-aws_secret_access_key=[[ SECRET_ACCESS_KEY ]]
+make terraform ARG=init
+make terraform ARG=plan
+make terraform ARG=apple
 ```
