@@ -17,3 +17,7 @@ variable "key_name" {
     type    = string
     description = "EC2 KeyPair Name"
 }
+
+variable "subnet_id" {
+    type    = string
+}

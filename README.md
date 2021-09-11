@@ -11,10 +11,15 @@ make awscli ARG="ec2 describe-images --image-ids ami-0df99b3a8349462c6"
 
 
 ## Terraform
-1. Update backend.tf, change `key`
+1. Update backend.tf, change
+* `bucket`: Need to be created manually
+* `region`
+* `key`
+
 2. Using these commands
 ```
 make terraform ARG=init
 make terraform ARG=plan
-make terraform ARG=apple
+make terraform ARG=apply
+make terraform ARG=destroy
 ```
