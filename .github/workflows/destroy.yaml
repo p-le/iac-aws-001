@@ -40,11 +40,7 @@ jobs:
       # Create input variables from Environment Secret
       # NOTE: Avoid terraform.tfvars
       - name: Setup Terraform variables
-        run: |-
-          cat > pipeline.auto.tfvars <<EOF
-            key_name  = "${{ secrets.KEY_NAME }}"
-            subnet_id = "${{ secrets.SUBNET_ID }}"
-          EOF
+        run: cp development.tfvars.example development.auto.tfvars
 
       # Destroy deployed Infrastructure on AWS
       - name: Terraform destroy
