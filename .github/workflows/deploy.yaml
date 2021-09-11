@@ -47,8 +47,45 @@ jobs:
 
       # Generates an execution plan for Terraform
       - name: Terraform Plan
+        id: plan
         run: terraform plan
+        continue-on-error: true
 
+      # Adds a comment to the pull request with results of the format, init and plan
+      - name: Update Pull Request
+        id: add-comment
+        uses: actions/github-script@v4
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Show Plan</summary>
+            \`\`\`\n      ${process.env.PLAN}      \`\`\`
+            </details>
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      # Print result of the github-script
+      - name: Get result
+        if: github.event_name == 'pull_request'
+        run: echo "${{steps.add-comment.outputs.result}}"
+
+      # Exit if terraform plan failed
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      # Apply the plan if merge to branch master
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
