@@ -3,8 +3,8 @@ variable "environment" {
 }
 
 variable "ubuntu_account_number" {
-  type    = string
-  default = "099720109477"
+  type        = string
+  default     = "099720109477"
   description = "Owner ID of Ubuntu AWS AMI"
 }
 
@@ -20,11 +20,11 @@ variable "key_name" {
 }
 
 variable "subnet_id" {
-  type = string
+  type        = string
   description = "Subnet ID that EC2 Instance running on"
 }
 
 variable "security_group_ids" {
-  type = list(string)
+  type        = list(string)
   description = "List of Security Group IDs attach to the EC2 Instance"
 }
