@@ -51,8 +51,8 @@ jobs:
       - name: Setup Terraform variables
         run: |-
           cat > pipeline.auto.tfvars <<EOF
-            key_name  = ${{ secrets.KEY_NAME }}
-            subnet_id = ${{ secrets.SUBNET_ID }}
+            key_name  = "${{ secrets.KEY_NAME }}"
+            subnet_id = "${{ secrets.SUBNET_ID }}"
           EOF
 
       # Generates an execution plan for Terraform
