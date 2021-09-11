@@ -30,10 +30,21 @@ jobs:
       # Install the latest version of Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_API_TOKEN }}
 
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         run: terraform init
+
+      # Create input variables from Environment Secret
+      # NOTE: Avoid terraform.tfvars
+      - name: Setup Terraform variables
+        run: |-
+          cat > pipeline.auto.tfvars <<EOF
+            key_name  = "${{ secrets.KEY_NAME }}"
+            subnet_id = "${{ secrets.SUBNET_ID }}"
+          EOF
 
       # Destroy deployed Infrastructure on AWS
       - name: Terraform destroy
